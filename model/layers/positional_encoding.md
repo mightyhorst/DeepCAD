@@ -58,3 +58,57 @@ class PositionalEncodingLUT(nn.Module):
 ```
 
 These classes can be used to apply positional encoding to the input tensors in a Transformer-based model.
+
+# Breakdown
+Certainly, let's break down the contents of the `model/layers/positional_encoding.py` file into different sections:
+
+### Imports:
+```python
+import math
+import torch
+import torch.nn as nn
+```
+- The file imports `math` for mathematical functions and `torch` for tensor computations.
+- It imports the `nn` module from PyTorch's neural network library.
+
+### Classes: `PositionalEncodingSinCos`, `PositionalEncodingLUT`
+These classes define different positional encoding methods used in transformer-based models:
+
+#### Class: `PositionalEncodingSinCos`
+```python
+class PositionalEncodingSinCos(nn.Module):
+    def __init__(self, d_model, dropout=0.1, max_len=250):
+        # __init__ method
+    def forward(self, x):
+        # forward method
+```
+- This class implements the positional encoding using a combination of sine and cosine functions.
+- It generates positional encodings for sequences of a given maximum length.
+- The `forward` method adds positional encodings to the input tensor.
+
+#### Class: `PositionalEncodingLUT`
+```python
+class PositionalEncodingLUT(nn.Module):
+    def __init__(self, d_model, dropout=0.1, max_len=250):
+        # __init__ method
+    def _init_embeddings(self):
+        # initializes embeddings
+    def forward(self, x):
+        # forward method
+```
+- This class implements the positional encoding using a lookup table (LUT) approach with embeddings.
+- It generates positional embeddings based on the indices of positions.
+- The `_init_embeddings` method initializes the positional embeddings.
+- The `forward` method adds positional embeddings to the input tensor.
+
+### Dependencies and Flow:
+- This file depends on the `math` module for mathematical calculations and the `torch` library for tensor operations.
+- It also imports the `nn` module from PyTorch for building neural network components.
+- The classes in this file are designed to be used as positional encoding methods within transformer-based models.
+
+### Relation to the Paper:
+The `positional_encoding.py` file contributes to the implementation of positional encodings within the transformer-based architecture proposed in the paper "DeepCAD: A Deep Generative Network for Computer-Aided Design Models." This is significant because positional encodings are crucial for transformers to understand the order and positions of elements in sequences.
+
+The positional encodings in the file are of two types: `PositionalEncodingSinCos` and `PositionalEncodingLUT`. The `PositionalEncodingSinCos` class uses sine and cosine functions to generate positional encodings, while the `PositionalEncodingLUT` class employs an embedding lookup table for the same purpose.
+
+To fully understand the relevance of this code to the paper, it's essential to review the paper's explanation of positional encodings in transformer models, particularly in the context of Computer-Aided Design (CAD) data. By examining the paper's discussion of model architecture and positional encodings, you can gain insights into how these encoding methods contribute to the overall performance of the proposed DeepCAD model. The paper can be found at https://arxiv.org/abs/2105.09492.
