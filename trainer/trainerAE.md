@@ -112,3 +112,67 @@ def evaluate(self, test_loader):
 
 **Paper Relation:**
 This code relates to the paper "DeepCAD: A Deep Generative Network for Computer-Aided Design Models" by implementing the training and evaluation logic for the CADTransformer model proposed in the paper. It constructs the CADTransformer model, sets up optimization and learning rate scheduling, defines the loss function, and implements methods for encoding, decoding, and evaluating the model's performance. The model architecture and training methodology are consistent with the paper's objectives of generating CAD models. The loss function and evaluation metrics are aligned with the paper's focus on accuracy and quality of generated designs.
+
+### Flow
+The `TrainerAE.py` file provides the training loop and related functionalities for the DeepCAD model. It orchestrates the training process, including building the network, defining loss functions, setting up optimizers, training epochs, updating the network, recording losses, and evaluating the model. Here's a step-by-step explanation of how `TrainerAE.py` is used:
+
+1. **Import Dependencies:**
+    - Import necessary modules, such as torch, torch.optim, and other required components.
+
+2. **Build TrainerAE Class:**
+    - Define the `TrainerAE` class, which is derived from the `BaseTrainer` class (defined in `trainer/base.py`).
+    - Implement methods within the class for building the network, setting the optimizer, defining loss functions, and various other training-related functionalities.
+
+3. **Instantiate TrainerAE:**
+    - Create an instance of the `TrainerAE` class by providing a configuration (`cfg`) object.
+    - The configuration includes hyperparameters, paths to log and model directories, and other settings.
+
+4. **Build Network:**
+    - Inside the `__init__` method of the `TrainerAE` class, the network (CADTransformer) is built using the configuration parameters.
+    - The network architecture and layers are defined based on the DeepCAD model.
+
+5. **Set Loss Function:**
+    - In the `set_loss_function` method, the loss function (`CADLoss`) is instantiated with the configuration parameters.
+    - This loss function computes losses based on predicted and target outputs.
+
+6. **Set Optimizer:**
+    - The `set_optimizer` method initializes the optimizer (`Adam` in this case) with the network's parameters and learning rate.
+    - A learning rate scheduler (GradualWarmupScheduler) might also be set up to control learning rate changes during training.
+
+7. **Training Loop:**
+    - The `train_func` method implements a single training step.
+    - Inside the training loop, the network is put in training mode, and forward passes are performed.
+    - Losses are calculated using the CAD loss function.
+    - Gradients are calculated, and the optimizer updates the network's weights.
+
+8. **Validation Loop:**
+    - The `val_func` method is similar to the training loop but operates on validation data.
+    - It calculates losses for validation data without updating the network's weights.
+
+9. **Epoch Management:**
+    - The training process iterates through multiple epochs.
+    - Within each epoch, the training and validation loops are executed.
+
+10. **Learning Rate Update:**
+    - The learning rate scheduler is responsible for updating the learning rate during training.
+    - It might involve warm-up and annealing strategies to stabilize and enhance training.
+
+11. **Loss Recording:**
+    - The `record_losses` method records losses to the TensorBoard summary writer.
+    - This helps monitor the training progress and visualize loss trends.
+
+12. **Checkpointing:**
+    - The `save_ckpt` method saves model checkpoints during training.
+    - These checkpoints can be used for restoring the model and continuing training.
+
+13. **Loading Checkpoints:**
+    - The `load_ckpt` method loads a previously saved checkpoint to continue training from a specific point.
+
+14. **Training Completion:**
+    - Once all epochs are completed, the training process ends.
+
+15. **Evaluation and Visualization:**
+    - The `evaluate` method might be used to evaluate the model on test data and record evaluation metrics.
+    - Visualization of training and validation results can be performed using the TensorBoard writer.
+
+In summary, the `TrainerAE.py` file serves as the central module for training the DeepCAD model. It defines the training loop, handles data processing, computes losses, updates model parameters, and monitors training progress. This file is an integral part of the DeepCAD project and contributes to achieving the objectives outlined in the paper "DeepCAD: A Deep Generative Network for Computer-Aided Design Models."
