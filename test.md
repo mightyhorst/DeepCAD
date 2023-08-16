@@ -1,0 +1,1 @@
+The purpose of the `/content/code/test.py` script is not provided in the given context. Without the code snippet of the `/content/code/test.py` script, it is not possible to determine its specific purpose.

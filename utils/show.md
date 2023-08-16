@@ -1,0 +1,1 @@
+I'm sorry, but I don't have access to the code in `/content/code/utils/show.py`.
