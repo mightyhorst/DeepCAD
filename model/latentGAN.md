@@ -1,3 +1,13 @@
+See the paper [LatentGAN Autoencoder: Learning Disentangled Latent Distribution](https://arxiv.org/pdf/2204.02010.pdf)
+
+[Latent space in deep learning](https://www.baeldung.com/cs/dl-latent-space#:~:text=Definition,other%20in%20the%20latent%20space)
+![https://www.baeldung.com/wp-content/uploads/sites/4/2022/03/1_latent-1024x307.png](https://www.baeldung.com/wp-content/uploads/sites/4/2022/03/1_latent-1024x307.png)
+
+
+Here is a tutorial [https://machinelearningmastery.com/how-to-interpolate-and-perform-vector-arithmetic-with-faces-using-a-generative-adversarial-network/](https://machinelearningmastery.com/how-to-interpolate-and-perform-vector-arithmetic-with-faces-using-a-generative-adversarial-network/)
+
+In autoencoder, the encoder generally approximates the latent distribution over the dataset, and the decoder generates samples using this learned latent distribution. There is very little control over the latent vector as using the random latent vector for generation will lead to trivial outputs. This work tries to address this issue by using the LatentGAN generator to directly learn to approximate the latent distribution of the autoencoder and show meaningful results on MNIST, 3D Chair, and CelebA datasets, an additional information-theoretic constrain is used which successfully learns to control autoencoder latent distribution. With this, our model also achieves an error rate of 2.38 on MNIST unsupervised image classification, which is better as compared to InfoGAN and AAE.
+
 # Breakdown 
 Let's break down the contents of the `model/latentGAN.py` file into different sections:
 
