@@ -104,3 +104,36 @@ These methods and functions are essential for converting, transforming, and norm
 These methods provide functionalities specific to loops and profiles, which are core components of the paper's CAD model representation. The ability to construct, reorder, draw, and sample points from loops and profiles is fundamental to the paper's generative approach.
 
 In summary, the "cadlib/sketch.py" file provides the essential classes and methods for representing and manipulating sketches, loops, and profiles within the context of CAD models. These components are directly aligned with the paper's focus on generating CAD models using deep generative networks. The file provides the foundational elements necessary for representing sketches and preparing them for integration into the generative model.
+
+#### Paper and Code
+The provided code from the DeepCAD repository seems to relate to the implementation of the CAD representation and manipulation described in the paper. Let's break down the alignment of the paper and the code:
+
+**Paper Passage:**
+The paper discusses the concept of a CAD model's construction using sketch commands to specify closed curves on a 2D plane in 3D space. These curves form loops that, in turn, create profiles. The paper emphasizes the importance of curve types like lines, arcs, and circles for this representation.
+
+**Code:**
+The code you've provided is present in the file `cadlib/sketch.py`. This file seems to deal with the base representation of sketches, loops, and profiles, which aligns with the paper's discussion about sketch commands, loops, and profiles.
+
+Here's how the alignment occurs:
+
+1. **SketchBase and Sketch Commands:**
+   The `SketchBase` class appears to represent a basic structure for sketches and includes methods for transforming, normalizing, and denormalizing sketches. This seems to align with the paper's focus on sketch commands, curves, and their parameters.
+
+2. **Loop and Profile Representation:**
+   The `Loop` and `Profile` classes seem to be the implementation of the loops and profiles discussed in the paper. The code defines methods for constructing loops and profiles from vector representations, reordering curves within loops, and converting to vector format.
+
+3. **Normalization and Transformation:**
+   Methods such as `normalize` and `transform` in the code align with the paper's concept of normalizing sketches within a certain size range and applying transformations.
+
+4. **Curve Representation:**
+   While the code doesn't seem to directly define the individual curve classes like lines, arcs, and circles, it references the `construct_curve_from_vector` function, suggesting that there's likely code elsewhere that handles the curve-specific details.
+
+5. **Sample Points:**
+   The `sample_points` method in the code appears to align with the idea of uniformly sampling points from sketches, which could be relevant for generating data points for curves.
+
+6. **Vector Representation:**
+   The `to_vector` methods in the code appear to be responsible for converting sketches, loops, and profiles into vector representations, which corresponds to the paper's description of representing profiles using sequences of commands.
+
+Overall, the provided code seems to be related to implementing the sketch representation and manipulation discussed in the paper. However, since the complete alignment may require more context and understanding of the entire codebase, this analysis provides a general perspective on how the code corresponds to the paper's content.
+
+
