@@ -82,3 +82,73 @@ The code you provided defines constants, masks, and structures that are used to 
 
 In summary, the code you provided is directly relevant to the core concepts and methods outlined in the DeepCAD paper. It addresses how CAD commands are represented numerically, how they are processed by the autoencoder, and how the generative aspect of the model is implemented. The code's definitions and structures align with the paper's discussions on CAD command representation, autoencoder architecture, and network-friendly techniques for handling CAD command sequences.
 
+
+### Attempt to combine the paper and code 
+Yes, the file `cadlib/macro.py` is definitely pertinent to the DeepCAD model as it contains various constants, indices, and masks that seem to relate to the structure and representation of CAD command sequences. Here's a breakdown of what the contents of this file seem to include:
+
+1. **Command and Operation Definitions:**
+   The definitions of various CAD commands and extrude operations are present in the `ALL_COMMANDS` and `EXTRUDE_OPERATIONS` lists, respectively.
+
+   ```py
+ALL_COMMANDS = ['Line', 'Arc', 'Circle', 'EOS', 'SOL', 'Ext']
+EXTRUDE_OPERATIONS = [
+  "NewBodyFeatureOperation", 
+  "JoinFeatureOperation",
+  "CutFeatureOperation", 
+  "IntersectFeatureOperation",
+]
+   ```
+
+3. **Indices of Command Types:**
+   The indices of different commands in the `ALL_COMMANDS` list are provided, such as `LINE_IDX`, `ARC_IDX`, `CIRCLE_IDX`, and so on.
+
+```py
+LINE_IDX = ALL_COMMANDS.index('Line')
+ARC_IDX = ALL_COMMANDS.index('Arc')
+CIRCLE_IDX = ALL_COMMANDS.index('Circle')
+```
+
+4. **Padding and Argument Information:**
+   Constants like `PAD_VAL` for padding values and different counts of arguments for sketch, plane, transformation, and extrusion are defined.
+
+   ```py
+PAD_VAL = -1
+   ```
+
+6. **Command-Argument Mask:**
+   The `CMD_ARGS_MASK` matrix seems to indicate which arguments are expected for each command type. For instance, a row indicates whether an argument is expected for a specific command.
+
+```py
+CMD_ARGS_MASK = np.array([[1, 1, 0, 0, 0, *[0]*N_ARGS_EXT],  # line
+                          [1, 1, 1, 1, 0, *[0]*N_ARGS_EXT],  # arc
+                          [1, 1, 0, 0, 1, *[0]*N_ARGS_EXT],  # circle
+                          [0, 0, 0, 0, 0, *[0]*N_ARGS_EXT],  # EOS
+                          [0, 0, 0, 0, 0, *[0]*N_ARGS_EXT],  # SOL
+                          [*[0]*N_ARGS_SKETCH, *[1]*N_ARGS_EXT]]) # Extrude
+```
+
+7. **Normalization and Scaling:**
+   The `NORM_FACTOR` seems to be a scale factor used for normalization to prevent overflow during data augmentation or processing.
+
+```py
+NORM_FACTOR = 0.75 # scale factor for normalization to prevent overflow during augmentation
+```
+
+9. **Maximum Limits:**
+   Various constants like `MAX_N_EXT`, `MAX_N_LOOPS`, `MAX_N_CURVES`, and `MAX_TOTAL_LEN` define the maximum allowable counts for different components in a CAD sequence.
+
+```py
+MAX_N_EXT = 10 # maximum number of extrusion
+MAX_N_LOOPS = 6 # maximum number of loops per sketch
+MAX_N_CURVES = 15 # maximum number of curves per loop
+MAX_TOTAL_LEN = 60 # maximum cad sequence length
+```
+
+10. **Dimension of Arguments:**
+   The `ARGS_DIM` constant seems to represent the dimension of arguments.
+
+```py
+ARGS_DIM = 256
+```
+
+These constants and definitions seem to be relevant for handling the CAD command sequences and their associated parameters, which aligns with the idea of CAD representation discussed in the paper passage you provided. The file `cadlib/macro.py` likely plays a role in managing the representation and processing of CAD command sequences within the DeepCAD model.
