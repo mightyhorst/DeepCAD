@@ -24,10 +24,35 @@ def process_one(data_id):
         data = json.load(fp)
 
     try:
+        """
+        @step Load CADSequence data from a dictionary
+        """
         cad_seq = CADSequence.from_dict(data)
+        
+        """
+        @step  Normalize the CADSequence data to fit within a standardized size
+        """
         cad_seq.normalize()
+        
+        """
+        @step  Numericalize the CADSequence data by converting continuous values into discrete integers
+        """
         cad_seq.numericalize()
-        cad_vec = cad_seq.to_vector(MAX_N_EXT, MAX_N_LOOPS, MAX_N_CURVES, MAX_TOTAL_LEN, pad=False)
+        
+        """
+        @step  
+            Convert the CADSequence data into a vector representation with specific constraints
+            The arguments MAX_N_EXT, MAX_N_LOOPS, MAX_N_CURVES, and MAX_TOTAL_LEN determine the maximum limits
+            pad=False indicates that the output vector won't be padded if the constraints are not met
+        """
+        cad_vec = cad_seq.to_vector(
+            MAX_N_EXT, 
+            MAX_N_LOOPS, 
+            MAX_N_CURVES, 
+            MAX_TOTAL_LEN, 
+            pad=False,
+        )
+
 
     except Exception as e:
         print("failed:", data_id)
