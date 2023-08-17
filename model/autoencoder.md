@@ -172,11 +172,12 @@ The embedding, encoding, and decoding processes defined in classes like `CADEmbe
 To understand the relationship between this file and the paper in more detail, one should refer to the paper's sections on the model architecture, embedding, encoding, decoding, and overall model operation. While the specific code file may not be directly referenced, the concepts and operations performed by the classes in this file closely relate to the paper's description of the DeepCAD model.
 
 #### Relation to section 3.2. Autoencoder for CAD Models
-[3.2. Autoencoder for CAD Models](https://ar5iv.labs.arxiv.org/html/2105.09492)
+> @see [3.2. Autoencoder for CAD Models](https://ar5iv.labs.arxiv.org/html/2105.09492)
+
 Yes, the provided code from the file `model/autoencoder.py` is indeed related to the embedding description from the paper. The code corresponds to the implementation of the embedding part of the DeepCAD model. Let's break down the key concepts from the paper's description and see how they relate to the code.
 
 **Paper Description:**
-"Similar in spirit to the approach in natural language processing [40], we first project every command c_i onto a common embedding space. Yet, different from words in natural languages, a CAD command c_i = (t_i, 𝒑_i) has two distinct parts: its command type t_i and parameters 𝒑_i. We therefore formulate a different way of computing the embedding of c_i: take it as a sum of three embeddings, that is,
+> "Similar in spirit to the approach in natural language processing [40], we first project every command c_i onto a common embedding space. Yet, different from words in natural languages, a CAD command c_i = (t_i, 𝒑_i) has two distinct parts: its command type t_i and parameters 𝒑_i. We therefore formulate a different way of computing the embedding of c_i: take it as a sum of three embeddings, that is,
 𝒆(c_i) = 𝒆^cmd + 𝒆^param + 𝒆^pos ∈ ℝ^dE."
 
 **Code Explanation:**
