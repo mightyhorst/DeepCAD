@@ -170,3 +170,66 @@ The `autoencoder.py` file is the core implementation of the CAD transformer mode
 The embedding, encoding, and decoding processes defined in classes like `CADEmbedding`, `Encoder`, `FCN`, `Decoder`, and `CADTransformer` correspond to the different components of the proposed model architecture discussed in the paper. The use of transformer layers, positional encodings, and various embedding techniques are essential elements of the CAD transformer model, and this file captures those components.
 
 To understand the relationship between this file and the paper in more detail, one should refer to the paper's sections on the model architecture, embedding, encoding, decoding, and overall model operation. While the specific code file may not be directly referenced, the concepts and operations performed by the classes in this file closely relate to the paper's description of the DeepCAD model.
+
+#### Relation to section 3.2. Autoencoder for CAD Models
+[3.2. Autoencoder for CAD Models](https://ar5iv.labs.arxiv.org/html/2105.09492)
+Yes, the provided code from the file `model/autoencoder.py` is indeed related to the embedding description from the paper. The code corresponds to the implementation of the embedding part of the DeepCAD model. Let's break down the key concepts from the paper's description and see how they relate to the code.
+
+**Paper Description:**
+"Similar in spirit to the approach in natural language processing [40], we first project every command c_i onto a common embedding space. Yet, different from words in natural languages, a CAD command c_i = (t_i, 𝒑_i) has two distinct parts: its command type t_i and parameters 𝒑_i. We therefore formulate a different way of computing the embedding of c_i: take it as a sum of three embeddings, that is,
+𝒆(c_i) = 𝒆^cmd + 𝒆^param + 𝒆^pos ∈ ℝ^dE."
+
+**Code Explanation:**
+Let's break down the code snippet step by step:
+
+1. **Command Embedding (`CADEmbedding` class):**
+    The `CADEmbedding` class in the code corresponds to the embedding described in the paper. It's responsible for embedding each command `c_i` into a common embedding space.
+
+   ```python
+   class CADEmbedding(nn.Module):
+       def __init__(self, cfg, seq_len, use_group=False, group_len=None):
+           super().__init__()
+
+           # Command embedding
+           self.command_embed = nn.Embedding(cfg.n_commands, cfg.d_model)
+   
+           # ...
+   ```
+   
+   In the code, `self.command_embed` is an instance of `nn.Embedding` that maps each command to a continuous vector in the embedding space.
+
+2. **Parameter Embedding (`arg_embed` and `embed_fcn`):**
+    The paper describes that each command has parameters `𝒑_i`, and these parameters need to be embedded separately.
+
+   ```python
+   self.arg_embed = nn.Embedding(args_dim, 64, padding_idx=0)
+   self.embed_fcn = nn.Linear(64 * cfg.n_args, cfg.d_model)
+   ```
+   
+   In the code, `arg_embed` is another instance of `nn.Embedding` responsible for embedding each parameter `𝒑_i` into a 64-dimensional vector. Then, `embed_fcn` linearly combines the embeddings of parameters to get the final parameter embedding.
+
+3. **Positional Embedding (`PositionalEncodingLUT`):**
+    The paper mentions the use of positional embedding to indicate the index of the command `c_i` in the whole command sequence.
+
+   ```python
+   self.pos_encoding = PositionalEncodingLUT(cfg.d_model, max_len=seq_len+2)
+   ```
+   
+   In the code, `pos_encoding` is an instance of `PositionalEncodingLUT` which generates positional embeddings based on the position of the command in the sequence.
+
+4. **Combining Embeddings (`forward` method):**
+    The paper states that the embedding of a command `c_i` is computed as a sum of three embeddings: command embedding, parameter embedding, and positional embedding.
+
+   ```python
+   def forward(self, commands, args, groups=None):
+       src = self.command_embed(commands.long()) + \
+             self.embed_fcn(self.arg_embed((args + 1).long()).view(S, N, -1))
+       
+       src = src + self.pos_encoding(src)
+       # ...
+   ```
+   
+   In the code's `forward` method, these embeddings are combined by adding them together to form the embedding of each command.
+
+So, yes, the provided code is directly related to the embedding process described in the paper. It implements the process of embedding commands, their parameters, and incorporating positional information, following the approach outlined in the paper.
+
