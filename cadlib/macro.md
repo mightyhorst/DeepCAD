@@ -89,7 +89,7 @@ Yes, the file `cadlib/macro.py` is definitely pertinent to the DeepCAD model as 
 1. **Command and Operation Definitions:**
    The definitions of various CAD commands and extrude operations are present in the `ALL_COMMANDS` and `EXTRUDE_OPERATIONS` lists, respectively.
 
-   ```py
+```py
 ALL_COMMANDS = ['Line', 'Arc', 'Circle', 'EOS', 'SOL', 'Ext']
 EXTRUDE_OPERATIONS = [
   "NewBodyFeatureOperation", 
@@ -97,7 +97,7 @@ EXTRUDE_OPERATIONS = [
   "CutFeatureOperation", 
   "IntersectFeatureOperation",
 ]
-   ```
+```
 
 3. **Indices of Command Types:**
    The indices of different commands in the `ALL_COMMANDS` list are provided, such as `LINE_IDX`, `ARC_IDX`, `CIRCLE_IDX`, and so on.
@@ -111,9 +111,9 @@ CIRCLE_IDX = ALL_COMMANDS.index('Circle')
 4. **Padding and Argument Information:**
    Constants like `PAD_VAL` for padding values and different counts of arguments for sketch, plane, transformation, and extrusion are defined.
 
-   ```py
+```py
 PAD_VAL = -1
-   ```
+```
 
 6. **Command-Argument Mask:**
    The `CMD_ARGS_MASK` matrix seems to indicate which arguments are expected for each command type. For instance, a row indicates whether an argument is expected for a specific command.
