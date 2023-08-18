@@ -140,3 +140,28 @@ def reconstruct(cfg):
   - The results (`out_vec` and `gt_vec`) are saved to the HDF5 file.
 
 And that's the breakdown of the `reconstruct(cfg)` function within the `main()` function in the "test.py" file. This function handles the reconstruction of input data using the trained DeepCAD model.
+
+# ground truth vectors
+```python
+gt_vec = torch.cat([commands.unsqueeze(-1), args], dim=-1).squeeze(1).detach().cpu().numpy()
+```
+
+This line of code appears to be part of a data processing pipeline, likely involved in converting or preparing data for training a neural network. Let's go through it step by step:
+
+1. `commands`: This likely represents the CAD construction commands for a particular sequence. It's expected to be a tensor with shape `(batch_size, max_sequence_length)`, where each element indicates a construction command (e.g., line, arc, etc.).
+
+2. `args`: This represents additional arguments or parameters associated with each construction command. It's expected to be a tensor with shape `(batch_size, max_sequence_length, n_args)`, where `n_args` is the number of arguments for each command.
+
+3. `commands.unsqueeze(-1)`: This adds a new dimension at the end of the `commands` tensor. This is often done to match dimensions for concatenation. The resulting shape would be `(batch_size, max_sequence_length, 1)`.
+
+4. `torch.cat(...)`: This function concatenates tensors along a specified dimension. In this case, it concatenates the modified `commands` tensor with the `args` tensor along the last dimension. So, the shape of the concatenated tensor would be `(batch_size, max_sequence_length, 1 + n_args)`.
+
+5. `.squeeze(1)`: This function removes the dimension at index 1. This is likely used to reshape the tensor after concatenation. The result would be a tensor with shape `(batch_size, max_sequence_length + n_args)`.
+
+6. `.detach()`: This function detaches the tensor from the computation graph. This means that any gradients won't be tracked for this tensor. It's often used when you want to use the tensor for further computations without affecting the gradient calculations.
+
+7. `.cpu()`: This moves the tensor from the GPU to the CPU. This is often used when you want to work with the tensor using standard CPU operations.
+
+8. `.numpy()`: This converts the tensor to a NumPy array. This is often used when you need to work with the data in libraries that expect NumPy arrays.
+
+So, the overall effect of this line of code is to combine the construction commands and their associated arguments into a single tensor (`gt_vec`) with the shape `(batch_size, max_sequence_length + n_args)`. The tensor is then detached from the computation graph, moved to the CPU, and converted to a NumPy array for further processing. This processed data is likely being prepared as input for training or evaluation of the DeepCAD model.
