@@ -20,7 +20,7 @@ conda env create --file environment.yml --name "$ENV_NAME"
 
 # Activate the new environment
 echo "✅ Activating $ENV_NAME environment..."
-conda activate $ENV_NAME
+echo "👉 to activate run --> conda activate $ENV_NAME"
 
 echo ""
 echo "👇 Please run the following command..."
