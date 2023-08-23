@@ -13,14 +13,14 @@ ICCV 2021 (camera ready version coming soon)
 
 We also release the Onshape CAD data parsing scripts here: [onshape-cad-parser](https://github.com/ChrisWu1997/onshape-cad-parser).
 
-## Prerequisites
+## 🧑‍💻 Prerequisites
 
 - Linux
 - NVIDIA GPU + CUDA CuDNN
 - Python 3.7, PyTorch 1.5+
 
 
-## Dependencies
+## 👬 Dependencies
 
 Install python package dependencies through pip:
 
@@ -35,12 +35,14 @@ $ conda install -c conda-forge pythonocc-core=7.5.1
 ```
 
 
-## Data
+## 📦 Data
 
 Download data from [here](http://www.cs.columbia.edu/cg/deepcad/data.tar) ([backup](https://drive.google.com/drive/folders/1mSJBZjKC-Z5I7pLPTgb4b5ZP-Y6itvGG?usp=sharing)) and extract them under `data` folder. 
 - `cad_json` contains the original json files that we parsed from Onshape and each file describes a CAD construction sequence. 
 - `cad_vec` contains our vectorized representation for CAD sequences, which serves for fast data loading. They can also be obtained using `dataset/json2vec.py`.
 TBA.
+- `train_val_test_split.json` contains a json file with a reference to all the directories and files split into train, validation and test buckets. See below
+
 - Some evaluation metrics that we use requires ground truth point clouds. Run:
   ```bash
   $ cd dataset
@@ -48,19 +50,155 @@ TBA.
   ```
 The data we used are parsed from Onshape public documents with links from [ABC dataset](https://archive.nyu.edu/handle/2451/61215). We also release our parsing scripts [here](https://github.com/ChrisWu1997/onshape-cad-parser) for anyone who are interested in parsing their own data.
 
+####  🗂️ Test/Validation/Train Data split
+`🗂️ data/train_val_test_split.json` contains a json file with a reference to all the directories and files split into train, validation and test buckets. The format is as follows: 
+```js
+// 👉 json[bucket][directory/file]
+{
+  "train": {
+    "0098/00980001"
+  },
+  "validation": {
 
-## Training
-See all hyper-parameters and configurations under `config` folder. To train the autoencoder:
+  },
+  "test": {
+
+  },
+}
+```
+where `train` is the bucket, `0098` is the directory under `cad_json` and `00980001` is the json file `00980001.json`
+
+> eg. before
+```
+🗂️ data
+   + 🗂️ cad_json
+      + 🗂️ 0098
+        +  📄 00980001.json
+``````
+
+after running the code in 👉`dataset/json2vec.py` these files will be converted into vectors and stored as an `h5` file
+
+```py
+"""
+@see 👉`dataset/json2vec.py`
+"""
+
+"""
+ @step Load CADSequence data from a dictionary
+"""
+cad_seq = CADSequence.from_dict(data)
+
+"""
+ @step  Normalize the CADSequence data to fit within a standardized size
+"""
+cad_seq.normalize()
+
+"""
+ @step  Numericalize the CADSequence data by converting continuous values into discrete integers
+"""
+cad_seq.numericalize()
+
+"""
+ @step  
+    Convert the CADSequence data into a vector representation with specific constraints
+    
+    The arguments 
+        MAX_N_EXT, 
+        MAX_N_LOOPS, 
+        MAX_N_CURVES, 
+        MAX_TOTAL_LEN 
+    determine the maximum limits.
+
+    These are set in 👉cadlib/macro.py
+
+    pad=False indicates that the output vector won't be padded if the constraints are not met
+"""
+cad_vec = cad_seq.to_vector(
+    MAX_N_EXT, 
+    MAX_N_LOOPS, 
+    MAX_N_CURVES, 
+    MAX_TOTAL_LEN, 
+    pad=False,
+)
+
+```
+```mermaid
+graph TD;
+    00980001.json-->data
+    data-->cad_seq
+    cad_seq-->normalize
+    normalize-->numericalize-->cad_vec
+    cad_vec-->00980001.h5
+```
+
+> data folder after json 2 vec: 
+```
+🗂️ data
+   + 🗂️ cad_json
+      + 🗂️ 0098
+        +  📄 00980001.json
+   + 🗂️ cad_vec
+      + 🗂️ 0098
+        +  📄 00980001.h5
+``````
+
+
+
+## 🏋️ Training
+### 🏋️ Pre-trained models
+
+Download pretrained model from [here](http://www.cs.columbia.edu/cg/deepcad/pretrained.tar) ([backup](https://drive.google.com/file/d/16RzOChCdLM5L1VUSFpgHwqU7JoQOF2Nd/view?usp=sharing)) and extract it under `proj_log`. All testing commands shall be able to excecuted directly, by specifying `--exp_name=pretrained` when needed.
+
+### 🏋️ Training models
+See all hyper-parameters and configurations under `config` folder. 
+
+##### 🏋️ Training configuration arguments
+The list of arguments that can be passed to the `train.py` and/or `test.py` file. The list is configured in the 👉`config/configAE.py` file
+```bash
+#
+# train
+#  @param exp_name - Name of the experiment
+#  @param proj_dir - Name of the project directory which is `proj_log` by defaul
+#  @param gpu_ids - GPU(s) to use 
+#
+#  👉folder: 🗂️proj_log/newDeepCAD
+#
+python train.py --exp_name newDeepCAD -g 0
+```
+
+| Argument Name    | Type    | Default Value  | Description                                                |
+| ----------------- | ------- | --------------- | ---------------------------------------------------------- |
+| `proj_dir`          | str     | `proj_log`        | Path to the project folder where models and logs are saved |
+| `data_root`         | str     | `data`            | Path to the source data folder                            |
+| `exp_name`          | str     | Current folder name | Name of the experiment                                    |
+| `gpu_ids`           | str     | `0`               | GPU(s) to use (e.g., "0" for one GPU, "0,1,2" for multiple GPUs; CPU not supported) |
+| `batch_size`        | int     | `512`             | Batch size                                                 |
+| `num_workers`       | int     | `8`               | Number of workers for data loading                        |
+| `nr_epochs`         | int     | `1000`            | Total number of epochs to train                            |
+| `lr`                | float   | `1e-3`            | Initial learning rate                                      |
+| `grad_clip`         | float   | `1.0 `            | Gradient clipping value                                    |
+| `warmup_step`       | int     | `2000`            | Step size for learning rate warm-up                        |
+| `continue`          | boolean | `False`           | Continue training from checkpoint                          |
+| `ckpt`              | str     | `latest`          | Desired checkpoint to restore (optional)                   |
+| `vis`               | boolean | `False`           | Visualize output during training                            |
+| `save_frequency`    | int     | `500`             | Save models every x epochs                                 |
+| `val_frequency`     | int     | `10`              | Run validation every x iterations                          |
+| `vis_frequency`     | int     | `2000`            | Visualize output every x iterations                        |
+| `augment`           | boolean | `False`           | Use random data augmentation                                |
+
+
+##### Train the autoencoder
+To train the autoencoder:
 
 ```bash
-$ python train.py --exp_name newDeepCAD -g 0
+python train.py --exp_name newDeepCAD -g 0
 ```
 
 For random generation, further train a latent GAN:
 
 ```bash
 # encode all data to latent space
-$ python test.py --exp_name newDeepCAD --mode enc --ckpt 1000 -g 0
+python test.py --exp_name newDeepCAD --mode enc --ckpt 1000 -g 0
 
 # train latent GAN (wgan-gp)
 $ python lgan.py --exp_name newDeepCAD --ae_ckpt 1000 -g 0
@@ -70,7 +208,7 @@ The trained models and experment logs will be saved in `proj_log/newDeepCAD/` by
 
 
 
-## Testing and Evaluation
+## 🧪 Testing and Evaluation
 
 #### __Autoencoding__
 
@@ -114,9 +252,7 @@ The trained models and experment logs will be saved in `proj_log/newDeepCAD/` by
   You can also run these two files individually with specified arguments.
 
 
-## Pre-trained models
 
-Download pretrained model from [here](http://www.cs.columbia.edu/cg/deepcad/pretrained.tar) ([backup](https://drive.google.com/file/d/16RzOChCdLM5L1VUSFpgHwqU7JoQOF2Nd/view?usp=sharing)) and extract it under `proj_log`. All testing commands shall be able to excecuted directly, by specifying `--exp_name=pretrained` when needed.
 
 
 ## Visualization and Export
