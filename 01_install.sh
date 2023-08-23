@@ -5,8 +5,8 @@ echo "🥝 Creating $ENV_NAME environment..."
 
 # Deactivate the current environment (if any)
 echo "🥶 Deactivate current environment..."
-# try --> source ~/miniconda3/etc/profile.d/conda.sh
-conda deactivate
+echo "👉 to deactivate run --> source ~/miniconda3/etc/profile.d/conda.sh"
+echo "👉 to deactivate run --> conda deactivate"
 
 # Remove the environment if it exists
 if conda env list | grep -q "$ENV_NAME"; then
