@@ -34,7 +34,7 @@ Install [pythonocc](https://github.com/tpaviot/pythonocc-core) (OpenCASCADE) by 
 $ conda install -c conda-forge pythonocc-core=7.5.1
 ```
 
-
+---
 ## 📦 Data
 
 Download data from [here](http://www.cs.columbia.edu/cg/deepcad/data.tar) ([backup](https://drive.google.com/drive/folders/1mSJBZjKC-Z5I7pLPTgb4b5ZP-Y6itvGG?usp=sharing)) and extract them under `data` folder. 
@@ -143,7 +143,7 @@ graph TD;
 ``````
 
 
-
+---
 ## 🏋️ Training
 ### 🏋️ Pre-trained models
 
@@ -152,14 +152,50 @@ Download pretrained model from [here](http://www.cs.columbia.edu/cg/deepcad/pret
 ### 🏋️ Training models
 See all hyper-parameters and configurations under `config` folder. 
 
+##### 🏋️ LGAN configuration arguments
+The list of arguments that can be passed to the `lgan.py`  file. The list is configured in the 👉`config/configLGAN.py` file
+```bash
+# ----------------
+# 🏋️ lgan example:
+# ----------------
+#   🎃exp_name - Name of the experiment
+#   🗂️proj_dir - Name of the project directory which is `proj_log` by default
+#   ⛳️ae_ckpt - Checkpoint for the autoencoder
+#   💻gpu_ids - GPU(s) to use 
+#
+#  👉folder: 🗂️proj_log/newDeepCAD
+#
+python lgan.py --exp_name newDeepCAD --ae_ckpt 1000 -g 0
+```
+
+
+| Argument Name | Type   | Default Value | Description                                                |
+| -------------- | ------ | ------------- | ---------------------------------------------------------- |
+| proj_dir       | str    | proj_log      | Path to the project folder where models and logs are saved |
+| exp_name       | str    | Required      | Name of the experiment                                    |
+| ae_ckpt        | str    | Required      | Checkpoint for the autoencoder                             |
+| continue       | boolean| False         | Continue training from checkpoint                          |
+| ckpt           | str    | latest        | Desired checkpoint to restore (optional)                   |
+| test           | boolean| False         | Test mode                                                  |
+| n_samples      | int    | 100           | Number of samples to generate when testing                |
+| gpu_ids        | str    | 0             | GPU(s) to use (e.g., "0" for one GPU, "0,1,2" for multiple GPUs; CPU not supported) |
+| batch_size     | int    | 256           | Batch size                                                 |
+| num_workers    | int    | 8             | Number of workers for data loading                        |
+| n_iters        | int    | 200000        | Total number of iterations to train                        |
+| save_frequency | int    | 100000        | Save models every x iterations                             |
+| lr             | float  | 2e-4          | Initial learning rate                                      |
+
+
+
 ##### 🏋️ Training configuration arguments
 The list of arguments that can be passed to the `train.py` and/or `test.py` file. The list is configured in the 👉`config/configAE.py` file
 ```bash
-#
-# train
-#  @param exp_name - Name of the experiment
-#  @param proj_dir - Name of the project directory which is `proj_log` by defaul
-#  @param gpu_ids - GPU(s) to use 
+# -----------------
+# 🏋️ train example:
+# -----------------
+#   🎃exp_name - Name of the experiment
+#   🗂️proj_dir - Name of the project directory which is `proj_log` by default
+#   💻gpu_ids - GPU(s) to use 
 #
 #  👉folder: 🗂️proj_log/newDeepCAD
 #
@@ -207,7 +243,7 @@ $ python lgan.py --exp_name newDeepCAD --ae_ckpt 1000 -g 0
 The trained models and experment logs will be saved in `proj_log/newDeepCAD/` by default. 
 
 
-
+---
 ## 🧪 Testing and Evaluation
 
 #### __Autoencoding__
@@ -254,7 +290,7 @@ The trained models and experment logs will be saved in `proj_log/newDeepCAD/` by
 
 
 
-
+---
 ## Visualization and Export
 We provide scripts to visualize CAD models and export the results to `.step` files, which can be loaded by almost all modern CAD softwares.
 ```bash
