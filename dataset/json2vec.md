@@ -32,14 +32,20 @@ def process_one(data_id):
         cad_seq = CADSequence.from_dict(data)
         cad_seq.normalize()
         cad_seq.numericalize()
-        cad_vec = cad_seq.to_vector(MAX_N_EXT, MAX_N_LOOPS, MAX_N_CURVES, MAX_TOTAL_LEN, pad=False)
+        cad_vec = cad_seq.to_vector(
+            MAX_N_EXT, 
+            MAX_N_LOOPS, 
+            MAX_N_CURVES, 
+            MAX_TOTAL_LEN, 
+            pad=False,
+        )
 
     except Exception as e:
         print("failed:", data_id)
         return
 
     if MAX_TOTAL_LEN < cad_vec.shape[0] or cad_vec is None:
-        print("exceed length condition:", data_id, cad_vec.shape[0])
+        print("❌ exceeds length condition:", data_id, cad_vec.shape[0])
         return
 
     save_path = os.path.join(SAVE_DIR, data_id + ".h5")

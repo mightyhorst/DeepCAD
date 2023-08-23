@@ -48,7 +48,7 @@ class BaseTrainer(object):
         """save checkpoint during training for future restore"""
         if name is None:
             save_path = os.path.join(self.model_dir, "ckpt_epoch{}.pth".format(self.clock.epoch))
-            print("Saving checkpoint epoch {}...".format(self.clock.epoch))
+            print("💾 Saving checkpoint epoch {}...".format(self.clock.epoch))
         else:
             save_path = os.path.join(self.model_dir, "{}.pth".format(name))
 

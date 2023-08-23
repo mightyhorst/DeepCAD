@@ -2,6 +2,31 @@
 
 Let's break down the contents of the `config/configAE.py` file into different sections:
 
+### Arguments
+Here are the arguments available:
+
+| Argument Name    | Type    | Default Value  | Description                                                |
+| ----------------- | ------- | --------------- | ---------------------------------------------------------- |
+| proj_dir          | str     | proj_log        | Path to the project folder where models and logs are saved |
+| data_root         | str     | data            | Path to the source data folder                            |
+| exp_name          | str     | Current folder name | Name of the experiment                                    |
+| gpu_ids           | str     | 0               | GPU(s) to use (e.g., "0" for one GPU, "0,1,2" for multiple GPUs; CPU not supported) |
+| batch_size        | int     | 512             | Batch size                                                 |
+| num_workers       | int     | 8               | Number of workers for data loading                        |
+| nr_epochs         | int     | 1000            | Total number of epochs to train                            |
+| lr                | float   | 1e-3            | Initial learning rate                                      |
+| grad_clip         | float   | 1.0             | Gradient clipping value                                    |
+| warmup_step       | int     | 2000            | Step size for learning rate warm-up                        |
+| continue          | boolean | False           | Continue training from checkpoint                          |
+| ckpt              | str     | latest          | Desired checkpoint to restore (optional)                   |
+| vis               | boolean | False           | Visualize output during training                            |
+| save_frequency    | int     | 500             | Save models every x epochs                                 |
+| val_frequency     | int     | 10              | Run validation every x iterations                          |
+| vis_frequency     | int     | 2000            | Visualize output every x iterations                        |
+| augment           | boolean | False           | Use random data augmentation                                |
+
+
+
 ### Imports:
 ```python
 import os

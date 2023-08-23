@@ -63,6 +63,7 @@ class TrainerAE(BaseTrainer):
 def build_net(self, cfg):
 ```
 - This method constructs the CADTransformer neural network by calling `CADTransformer(cfg).cuda()` and assigns it to `self.net`.
+- This method is called in the BaseTrainer constructor 
 
 ```python
 def set_optimizer(self, cfg):
